@@ -13,6 +13,61 @@ struct Tree_Node {
         val(val), left(left), right(right) {}
 };
 
+/** Takes one letter of morse code and inserts the ascii value of the letter it represents into a binary tree.
+    @param line: string of morse code
+    @param pos: represents how far through line the recursion has gotten
+    @param root: the head of the morse code binary tree
+*/
+Tree_Node* treeBuilder(string line, int pos, Tree_Node* root) {
+    pos++;
+    bool finished = false;
+    //if root is now at the position to insert the new letter, do it
+    if (pos == line.length()) {
+        finished = true;
+        if (!root) {
+            Tree_Node* newNode = new Tree_Node(line.at(0));
+            root = newNode;
+        }
+        else {
+            root->val = line.at(0);
+        }
+
+    }
+    //if we are not finished, recursively travel left for '.' and right for '-'
+    if (finished == false) {
+        if (line.at(pos) == '.') {
+            if (!root) {
+                //if we must travel through nodes that are not yet generated, generate them with val '0'
+                //if any '0's remain after the function's completion, then the tree must not be filled out completely
+                Tree_Node* newNode = new Tree_Node('0');
+                root = newNode;
+                root->left = treeBuilder(line, pos, root->left);
+            }
+            else {
+                root->left = treeBuilder(line, pos, root->left);
+            }
+        }
+
+        if (line.at(pos) == '-') {
+            if (!root) {
+                Tree_Node* newNode = new Tree_Node('0');
+                root = newNode;
+                root->right = treeBuilder(line, pos, root->right);
+            }
+            else {
+                root->right = treeBuilder(line, pos, root->right);
+            }
+        }
+    }
+    return root;
+}//end treeBuilder
+
+void treeBuilder(string line, Tree_Node* head) {
+    treeBuilder(line, 0, head);
+}//end treeBuilder
+
+
+
 int main() {
 
     ifstream fin("Morse_Code.txt");
@@ -21,10 +76,11 @@ int main() {
         cout << "Could not open file" << endl;
     }
     else {
-
+        Tree_Node* head = new Tree_Node(' ');
         string line;
         while (getline(fin, line)) { //Gets each line from the input file
-
+            cout << line << endl;
+            treeBuilder(line, head);
         }
 
         string option = "r";
