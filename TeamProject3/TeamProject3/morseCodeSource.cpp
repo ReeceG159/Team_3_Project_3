@@ -6,6 +6,13 @@
 #include <vector>
 using namespace std;
 
+struct Tree_Node {
+    int val;
+    Tree_Node* left, * right;
+    Tree_Node(int val, Tree_Node* left = NULL, Tree_Node* right = NULL) :
+        val(val), left(left), right(right) {}
+};
+
 int main() {
 
     ifstream fin("Morse_Code.txt");
