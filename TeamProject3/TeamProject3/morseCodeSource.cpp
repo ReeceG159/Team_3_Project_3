@@ -117,7 +117,26 @@ int main() {
     @return: morse code string of a string of lowercase letters (no spaces)
 */
 string& encode(string& str) {
-    return str;
+    string temp;
+    string returnstr = "";
+    int i = 0;
+    ifstream fin ("Morse_Code.txt");
+    if (!fin.is_open()){
+        cout<< "Could not open file"<<endl;
+    }
+    else{
+        while(str[i]){
+            getline(fin, temp);
+            if (str[i] == temp[0]){
+                temp[0] = ' ';
+                returnstr.append(temp);
+                i++;
+                fin.clear();
+                fin.seekg(0);
+            }
+        }
+        return returnstr;
+    }
 }
 
 /** Decodes morse code into a string of lowercase letters.
