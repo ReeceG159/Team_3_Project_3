@@ -66,6 +66,47 @@ void treeBuilder(string line, Tree_Node* head) {
     treeBuilder(line, 0, head);
 }//end treeBuilder
 
+string findchar(char target, Tree_Node* root){
+  string returnstr;
+  string tempstr = "";
+  if(!root){return 0;}
+  if(target == root->val){
+    return (" ");
+  }
+  else{
+    if(root->left){
+      tempstr = findchar(target, root->left);
+      if(tempstr != ""){
+        returnstr = ".";
+        returnstr.append(tempstr);
+        return (returnstr);
+      }
+    }
+    if(root->right){
+      tempstr = findchar(target,root->right);
+      if(tempstr != ""){
+        returnstr = "-";
+        returnstr.append(tempstr);
+        return (returnstr);
+      }
+    }
+    return ("");
+  }
+}
+
+string& encode(string& str, Tree_Node* root) {
+  int i = 0;
+  string returnstr = "";
+  while(str[i]){
+    if(str[i] == ' '){
+    }
+    else{
+      returnstr.append(findchar(str[i],root));
+    }
+    i++;
+  }
+  return (returnstr);
+}
 
 
 int main() {
@@ -84,6 +125,7 @@ int main() {
         }
 
         string option = "r";
+        string userinput;
         //the menu is in a while loop until the option selected is q
         //the menu only reads the first character of the input as the option
         while (option.at(0) != 'q') {
@@ -97,14 +139,18 @@ int main() {
 
             //Encode a string of lowercase letters with no spaces
             if (option.at(0) == 'e') {
-                cout << "Text here: " << endl;
-                //do it
+                cout << "Text here: ";
+                cin>>userinput;
+                userinput = encode(userinput, head);
+                cout<<endl<<userinput;
             }
 
             //Decode morse code with spaces as delimiters
             if (option.at(0) == 'd') {
-                cout << "Text here: " << endl;
-                //do it
+                cout << "Text here: ";
+                cin>>userinput;
+                userinput = decode(userinput, head);
+                cout<<endl<<userinput;
             }
 
         }
@@ -116,9 +162,7 @@ int main() {
     @param str: string of lowercase letters
     @return: morse code string of a string of lowercase letters (no spaces)
 */
-string& encode(string& str) {
-    return str;
-}
+
 
 /** Decodes morse code into a string of lowercase letters.
     @param str: string of morse code delimited with spaces
