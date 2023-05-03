@@ -4,6 +4,7 @@
 #include <string>
 #include <iterator>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 struct Tree_Node {
@@ -12,6 +13,8 @@ struct Tree_Node {
     Tree_Node(int val, Tree_Node* left = NULL, Tree_Node* right = NULL) :
         val(val), left(left), right(right) {}
 };
+
+Tree_Node* treehead; // fix this, currently this is a global and should become a private data member.
 
 /** Takes one letter of morse code and inserts the ascii value of the letter it represents into a binary tree.
     @param line: string of morse code
@@ -63,8 +66,56 @@ Tree_Node* treeBuilder(string line, int pos, Tree_Node* root) {
 }//end treeBuilder
 
 void treeBuilder(string line, Tree_Node* head) {
-    treeBuilder(line, 0, head);
+    treehead = treeBuilder(line, 0, head); // currently treehead is global, FIX THIS LATER
 }//end treeBuilder
+
+
+
+/** Encodes a string of lowercase letters into morse code.
+    @param str: string of lowercase letters
+    @return: morse code string of a string of lowercase letters (no spaces)
+*/
+string& encode(string& str) {
+    return str;
+}
+
+/** Wrapper function to recursively decode the morse code string of lowercase letters.
+    @param node: current location node on the binary tree
+    @param value: current morse code string.
+    @return: the characters we are searching for.
+*/
+int decode_node(Tree_Node* node, string& value) {
+    // This outputs the characters after traversing the tree
+    if (value.length() == 0) {
+        char letters = node->val;
+        cout << letters;
+        return node->val;
+    }
+    // Moves to the right node, then deletes the character processed.
+    else if (value[0] == '-') {
+        decode_node(node->right, value.erase(0, 1));
+    }
+    // Moves to the left node, then deletes the character processed.
+    else if (value[0] == '.') {
+        decode_node(node->left, value.erase(0, 1));
+    }
+}
+
+/** Decodes morse code into a string of lowercase letters.
+    @param str: string of morse code delimited with spaces
+    @return: string of lowercase letters
+*/
+string& decode(string& str) {
+    istringstream iss(str);
+    ostringstream oss;
+    string token;
+    while (iss >> token) {
+        decode_node(treehead, token); // need to fix treehead later, this is currently a global.
+    }
+    cout << "" << endl;
+    return str;
+}
+
 
 
 
@@ -75,6 +126,7 @@ int main() {
     if (!fin.is_open()) {
         cout << "Could not open file" << endl;
     }
+
     else {
         Tree_Node* head = new Tree_Node(' ');
         string line;
@@ -104,26 +156,11 @@ int main() {
             //Decode morse code with spaces as delimiters
             if (option.at(0) == 'd') {
                 cout << "Text here: " << endl;
-                //do it
+                string morse;
+                cin.ignore(256, '\n');
+                getline(cin, morse, '\n'); // might need to find a better way to do this later.
+                decode(morse);
             }
-
         }
-
     }//end else
 }//end main
-
-/** Encodes a string of lowercase letters into morse code.
-    @param str: string of lowercase letters
-    @return: morse code string of a string of lowercase letters (no spaces)
-*/
-string& encode(string& str) {
-    return str;
-}
-
-/** Decodes morse code into a string of lowercase letters.
-    @param str: string of morse code delimited with spaces
-    @return: string of lowercase letters
-*/
-string& decode(string& str) {
-    return str;
-}
