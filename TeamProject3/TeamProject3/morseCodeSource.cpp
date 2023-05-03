@@ -66,7 +66,55 @@ void treeBuilder(string line, Tree_Node* head) {
     treeBuilder(line, 0, head);
 }//end treeBuilder
 
+/** Encodes a string of lowercase letters into morse code.
+    @param str: string of lowercase letters
+    @return: morse code string of a string of lowercase letters (no spaces)
+*/
+string findchar(char target, Tree_Node* root){
+  string returnstr;
+  string tempstr = "";
+  char node = root->val;
+  
+  if(root == NULL){return "error";}
+  if(target == node){
+    return (" ");
+  }
+  else{
+    if(root->left != NULL){
+      tempstr = findchar(target, root->left);
+      if(tempstr != ""){
+        returnstr = ".";
+        returnstr.append(tempstr);
+        return (returnstr);
+      }
+    }
+    if(root->right != NULL){
+      tempstr = findchar(target,root->right);
+      if(tempstr != ""){
+        returnstr = "-";
+        returnstr.append(tempstr);
+        return (returnstr);
+      }
+    }
+    return ("");
+  }
+}
 
+string encode(string& str, Tree_Node* root) {
+  int i = 0;
+  string returnstr = "";
+  while(i <= str.size()){
+    if(str[i] == ' '){
+    }
+    else{
+      returnstr.append(findchar(str[i],root));
+      if(i == str.size()-1){
+        return (returnstr);
+      }
+    }
+    i++;
+  }
+  return (returnstr);
 
 int main() {
 
@@ -84,6 +132,8 @@ int main() {
         }
 
         string option = "r";
+        string userinput;
+        string output;
         //the menu is in a while loop until the option selected is q
         //the menu only reads the first character of the input as the option
         while (option.at(0) != 'q') {
@@ -92,19 +142,23 @@ int main() {
             cout << "d - Decode morse code" << endl;
             cout << "q - Quit" << endl;
             cout << endl;
-            cout << "Choose an option: " << endl;
+            cout << "Choose an option: ";
             cin >> option;
 
-            //Encode a string of lowercase letters with no spaces
+           //Encode a string of lowercase letters with no spaces
             if (option.at(0) == 'e') {
-                cout << "Text here: " << endl;
-                //do it
+                cout << "Text here: ";
+                cin>>userinput;
+                output = encode(userinput, head);
+                cout<<output<<endl;
             }
 
             //Decode morse code with spaces as delimiters
             if (option.at(0) == 'd') {
-                cout << "Text here: " << endl;
-                //do it
+                cout << "Text here: ";
+                cin>>userinput;
+                userinput = decode(userinput, head);
+                cout<<userinput<<endl;
             }
 
         }
@@ -112,12 +166,7 @@ int main() {
     }//end else
 }//end main
 
-/** Encodes a string of lowercase letters into morse code.
-    @param str: string of lowercase letters
-    @return: morse code string of a string of lowercase letters (no spaces)
-*/
-string& encode(string& str) {
-    return str;
+
 }
 
 /** Decodes morse code into a string of lowercase letters.
