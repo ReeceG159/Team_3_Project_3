@@ -125,6 +125,7 @@ int main() {
 
     if (!fin.is_open()) {
         cout << "Could not open file" << endl;
+        return -1;
     }
 
     else {
@@ -163,4 +164,5 @@ int main() {
             }
         }
     }//end else
+   return 0;
 }//end main
